@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+  sad_lily:
+    image: mysql:5.7
+    networks:
+      - spring-boot-mysql-network
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=trainingDB
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=user
+    ports:
+      - 6038:3306
+  web-service:
+      build:
+        context: ./
+        dockerfile: Dockerfile
+      ports:
+        - "8080:8080"
+      networks:
+        - spring-boot-mysql-network
+      depends_on:
+        - sad_lily
+
+networks:
+  spring-boot-mysql-network:
+    driver: bridge
